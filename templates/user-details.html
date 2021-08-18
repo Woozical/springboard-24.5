@@ -7,4 +7,17 @@
 <p>Email: {{user.email}}</p>
 <p>first_name: {{user.first_name}}</p>
 <p>last_name: {{user.last_name}}</p>
+<h2>Feedback</h2>
+{% if user.username == session['username'] %}
+    <a href="/user/{{user.username}}/feedback/add">Add Feedback</a>
+{% endif %}
+{% if user.feedback %}
+    <hr>
+    {% for post in user.feedback %}
+    <div>
+        <h3>{{post.title}}</h3>
+        <p>{{post.content}}</p>
+    </div>
+    {% endfor %}
+{% endif %}
 {% endblock %}

@@ -1,9 +1,10 @@
 """WTForms for User Auth Flask App"""
 
 from flask_wtf import FlaskForm
-from flask_wtf.recaptcha import validators
 from wtforms.fields import StringField, PasswordField
 from wtforms.validators import InputRequired, Length, Email
+from wtforms.widgets import TextArea
+
 
 class RegisterForm(FlaskForm):
 
@@ -34,5 +35,8 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
 
     username = StringField("Username",validators=[InputRequired()])
-    
     password = PasswordField("Password", validators=[InputRequired()])
+
+class FeedbackForm(FlaskForm):
+    title = StringField("Title", validators=[InputRequired(), Length(max=50)])
+    content = StringField("Content", widget=TextArea(), validators=[InputRequired()])

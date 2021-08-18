@@ -1,7 +1,7 @@
 """User Auth Flask App"""
 from flask import Flask, render_template, redirect, flash, session
-from models import db, connect_db, User
-from forms import RegisterForm, LoginForm
+from models import db, connect_db, User, Feedback
+from forms import RegisterForm, LoginForm, FeedbackForm
 from sqlalchemy import exc
 
 app = Flask(__name__)
@@ -57,14 +57,10 @@ def login_view():
         return render_template('login.html', form=form)
 
 @app.route('/user/<username>')
-def secret_view(username):
+def user_view(username):
     if 'username' in session:
         user = User.query.get_or_404(username)
-        if session['username'] == user.username:
-            return render_template('user-details.html', user=user)
-        else:
-            flash("You are not authorized to view that user's details.")
-            return redirect(f"/user/{session['username']}")
+        return render_template('user-details.html', user=user)
     else:
         flash('You must be logged in to view user details!')
         return redirect('/')
@@ -73,3 +69,21 @@ def secret_view(username):
 def logout_view():
     session.pop('username')
     return redirect('/')
+
+@app.route('/user/<username>/feedback/add', methods=['GET', 'POST'])
+def feedback_form_view(username):
+    
+    if session['username'] != username:
+        flash("You are not authorized to view this page")
+        return redirect(f'/user/{username}')
+    
+    form = FeedbackForm()
+    if form.validate_on_submit():
+        new_feedback = Feedback(
+            title=form.title.data, content=form.content.data, username=username
+        )
+        db.session.add(new_feedback)
+        db.session.commit()
+        return redirect(f'/user/{username}')
+    else:
+        return render_template('feedback-form.html', form=form)
