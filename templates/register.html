@@ -5,7 +5,7 @@
 {% block content %}
 
 <h1>Register an Account</h1>
-<form action="">
+<form action="", method="POST">
     {{ form.hidden_tag() }}
     {{form.username.label}}
     {{form.username()}}
