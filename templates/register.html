@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Register Account{% endblock %}
+
+{% block content %}
+
+<h1>Register an Account</h1>
+<form action="">
+    {{ form.hidden_tag() }}
+    {{form.username.label}}
+    {{form.username()}}
+    <br>
+    {{form.password.label}}
+    {{form.password()}}
+    <br>
+    {{form.email.label}}
+    {{form.email()}}
+    <br>
+    {{form.first_name.label}}
+    {{form.first_name()}}
+    <br>
+    {{form.last_name.label}}
+    {{form.last_name()}}
+    <br>
+    <button>Submit</button>
+</form>
+
+{% endblock %}
