@@ -7,6 +7,11 @@
 <p>Email: {{user.email}}</p>
 <p>first_name: {{user.first_name}}</p>
 <p>last_name: {{user.last_name}}</p>
+{% if user.username == session['username'] %}
+    <form action="/user/{{session['username']}}/delete" method="POST">
+        <button>Delete My Account (No take-backsies!)</button>
+    </form>
+{% endif %}
 <h2>Feedback</h2>
 {% if user.username == session['username'] %}
     <a href="/user/{{user.username}}/feedback/add">Add Feedback</a>
@@ -17,6 +22,12 @@
     <div>
         <h3>{{post.title}}</h3>
         <p>{{post.content}}</p>
+        {% if user.username == session['username'] %}
+            <a href="/feedback/{{post.id}}/update">Edit</a>
+            <form action="/feedback/{{post.id}}/delete" method="POST">
+                <button>Delete</button>
+            </form>
+        {% endif %}
     </div>
     {% endfor %}
 {% endif %}
