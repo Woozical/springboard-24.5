@@ -1,0 +1,1 @@
+"""WTForms for User Auth Flask App"""
