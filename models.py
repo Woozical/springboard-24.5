@@ -30,4 +30,9 @@ class User(db.Model):
 
     @classmethod
     def authenticate(cls, username, password):
-        pass
+        user = cls.query.get(username)
+
+        if user and bcrypt.check_password_hash(user.password, password):
+            return user
+        else:
+            return False
