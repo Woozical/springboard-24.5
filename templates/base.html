@@ -14,7 +14,7 @@
         <a href="/register">Register</a>
         <a href="/login">Login</a>
         {% else %}
-        <a href="/secret">Secret</a>
+        <a href="/user/{{session['username']}}">{{session['username']}}</a>
         <a href="/logout">Logout</a>
         {% endif %}
     </nav>

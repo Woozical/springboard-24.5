@@ -32,7 +32,7 @@ def register_view():
         try:
             db.session.commit()
             session['username'] = new_user.username
-            return redirect('/secret')
+            return redirect(f'/user/{new_user.username}')
         except exc.IntegrityError:
             db.session.rollback()
             flash('An account is already registered with that username/email.')
@@ -49,19 +49,24 @@ def login_view():
         user =  User.authenticate(form.username.data, form.password.data)
         if user:
             session['username'] = user.username
-            return redirect('/secret')
+            return redirect(f'/user/{user.username}')
         else:
             flash('Incorrect login credentials')
             return redirect('/login')
     else:
         return render_template('login.html', form=form)
 
-@app.route('/secret')
-def secret_view():
+@app.route('/user/<username>')
+def secret_view(username):
     if 'username' in session:
-        return "Welcome to the secret"
+        user = User.query.get_or_404(username)
+        if session['username'] == user.username:
+            return render_template('user-details.html', user=user)
+        else:
+            flash("You are not authorized to view that user's details.")
+            return redirect(f"/user/{session['username']}")
     else:
-        flash('You must be logged in to view the secret!')
+        flash('You must be logged in to view user details!')
         return redirect('/')
 
 @app.route('/logout')
